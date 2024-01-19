@@ -35,13 +35,29 @@ with open('buttons.json') as user_file:
 
 parsed_json = json.loads(file_contents)
 
-
-    
+timestamp1 = ""
+user_id = ""
 äänestäjät = []
+äänestäjät1 = []
+äänestäjät2 = []
+äänestäjät3 = []
 size1= []
+size2= []
+size3= []
 res = []
 ravintola1 = ['Cafe Hullu','Pancho Villa','Wolkoff']
 
+response = app.client.conversations_list()
+channel_name = 'lunch-bot'  # Replace with your channel name
+channel_id = None
+for channel in response['channels']:
+    if channel['name'] == channel_name:
+        channel_id = channel['id']
+        break
+if channel_id:
+    print(f"Channel ID for '{channel_name}': {channel_id}")
+else:
+    print(f"Channel '{channel_name}' not found.")
 
 
 datas1 = find_ruoka1()
@@ -50,10 +66,8 @@ datas3= find_ruoka3()
 
 
     
+def ruokanaTänään():
 
-    
-    
-def ruokana1():
     
     for data in datas1:
         data = data.text
@@ -64,12 +78,13 @@ def ruokana1():
             
             kaava2 = data.replace('€', ' euro ')
             res = [ravintola1[0]]
+            result = ''.join(res)
             print(kaava2)
             client.chat_postMessage(channel='#lunch-bot', text="",
             blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": f'{res}:\n{kaava2}!'},
+                "text": {"type": "mrkdwn", "text": f'{result}:\n{kaava2}!'},
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Vote"},
@@ -85,22 +100,6 @@ def ruokana1():
             #VIIKONLOPPU TAI EI RUOKAILUA
             print("ei ruokailua")
 
-
-
-@app.action("button_click1")
-def action_button_click1(body, ack, say):
-    # Acknowledge the action
-    ack()
-    #say(f"<@{body['user']['id']}> äänesti ravintolaa {ravintola}")
-    new_äänestäjä = f"<@{body['user']['id']}>"
-    äänestäjät.append(new_äänestäjä)
-    äänestäjät1 = list(set(äänestäjät))
-    size1 = len(äänestäjät1)
-    res = [ravintola1[0]]
-    say(f"({size1}) äänesti ravintolaa {res}")
-  
-def ruokana2():
-    
     for data in datas2:
         data = data.text
         #JOS TÄMÄ PÄIVÄMÄÄRÄ LÖYTYY RUOKALISTALTA, ruokalista tulostuu slackkiin
@@ -110,12 +109,13 @@ def ruokana2():
             
             kaava2 = data.replace('€', ' euro ')
             res = [ravintola1[1]]
+            result = ''.join(res)
             print(kaava2)
             client.chat_postMessage(channel='#lunch-bot', text="",
             blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": f'{res}:\n{kaava2}!'},
+                "text": {"type": "mrkdwn", "text": f'{result}:\n{kaava2}!'},
                 "accessory": {
                     "type": "button",
                     "text": {"type": "plain_text", "text": "Vote"},
@@ -130,26 +130,6 @@ def ruokana2():
         else:
             #VIIKONLOPPU TAI EI RUOKAILUA
             print("ei ruokailua")
-
-
-
-
-@app.action("button_click2")
-def action_button_click2(body, ack, say):
-    # Acknowledge the action
-    ack()
-    #say(f"<@{body['user']['id']}> äänesti ravintolaa {ravintola}")
-    new_äänestäjä = f"<@{body['user']['id']}>"
-    äänestäjät.append(new_äänestäjä)
-    äänestäjät1 = list(set(äänestäjät))
-    size1 = len(äänestäjät1)
-    res = [ravintola1[1]]
-    
-    say(f"({size1}) äänesti ravintolaa {res}")   
-
-
-def ruokana3():
-    
     for data in datas3:
         data = data.text
         #JOS TÄMÄ PÄIVÄMÄÄRÄ LÖYTYY RUOKALISTALTA, ruokalista tulostuu slackkiin
@@ -176,36 +156,107 @@ def ruokana3():
             ])
             
         
-        
         else:
             #VIIKONLOPPU TAI EI RUOKAILUA
             print("ei ruokailua")
+    global timestamp1
+    vastaus1=client.chat_postMessage(channel='#lunch-bot', text="Kukaan ei ole äänestänyt vielä")
+    timestamp1 = vastaus1['ts']
+    
 
 
 
 
-@app.action("button_click3")
-def action_button_click3(body, ack, say):
+
+
+
+
+   
+def äänestys():
+    
+    global timestamp1
+    if timestamp1:
+            
+            timestamp2 = timestamp1
+            res1 = [ravintola1[0]]
+            result1 = ''.join(res1)
+            res2 = [ravintola1[1]]
+            result2 = ''.join(res2)
+            res3 = [ravintola1[2]]
+            result3 = ''.join(res3)
+            if timestamp1:
+                global size1
+                global size2
+                global size3
+                #Update the previous message with the current vote count
+                client.chat_update(
+                channel=channel_id,
+                ts=f"{timestamp2}",
+                text=f"({size1}) on äänestänyt ravintolaa {result1}, ({size2}) on äänestänyt ravintolaa {result2}, ({size3}) on äänestänyt ravintolaa {result3}"
+                )
+                
+                
+            else:
+                # Post a new message and store the timestamp
+                vastaus = client.chat_postMessage(
+                channel='#lunch-bot',
+                text=f"{size1} on äänestänyt ravintolaa {result1}, {size2} on äänestänyt ravintolaa {result2}, {size3} on äänestänyt ravintolaa {result3}",
+                timestamp1 = vastaus['ts'])
+
+
+@app.action("button_click1")
+def action_button_click3(body, ack):
     
     ack()
-    #say(f"<@{body['user']['id']}> äänesti ravintolaa {ravintola}")
-    new_äänestäjä = f"<@{body['user']['id']}>"
-    äänestäjät.append(new_äänestäjä)
-    äänestäjät1 = list(set(äänestäjät))
-    size1 = len(äänestäjät1)
-    res = [ravintola1[2]]
-    #poistaa bracketit
-    result = ''.join(res)
-    if size1 > 0:
-        while True:
-            #30 min jälkeen äänestystulokset julkaistaan
-            time_wait = 30
-            time.sleep(time_wait * 60)
-            print(f'Waiting {time_wait} minutes')
-            say(f"({size1}) äänesti ravintolaa {result}")
-            break
-            
+    user_id = body['user']['id']
+    if user_id not in äänestäjät:
+        äänestäjät.append(user_id)
+
+    # Check if the user has already voted
+    if user_id in äänestäjät:
+        äänestäjät1.append(user_id)
+        global size1
+        äänestäjät11 = list(set(äänestäjät1))
+        size1 = len(äänestäjät11)
+        äänestys()
+@app.action("button_click2")
+def action_button_click3(body, ack):
     
+    ack()
+    user_id = body['user']['id']
+    if user_id not in äänestäjät:
+        äänestäjät.append(user_id)
+
+    # Check if the user has already voted
+    if user_id in äänestäjät:
+        äänestäjät2.append(user_id)
+        global size2
+        äänestäjät22 = list(set(äänestäjät2))
+        size2 = len(äänestäjät22)
+        äänestys()
+@app.action("button_click3")
+def action_button_click3(body, ack):
+    
+    ack()
+    user_id = body['user']['id']
+    if user_id not in äänestäjät:
+        äänestäjät.append(user_id)
+
+    # Check if the user has already voted
+    if user_id in äänestäjät:
+        äänestäjät3.append(user_id)
+        global size3
+        äänestäjät33 = list(set(äänestäjät3))
+        size3 = len(äänestäjät33)
+        äänestys()
+
+        
+        
+     
+                
+
+        
+   
     
     
     
@@ -214,8 +265,6 @@ def action_button_click3(body, ack, say):
 
 
 if __name__ == "__main__":
-    ruokana1()
-    ruokana2()
-    ruokana3()
+    ruokanaTänään()
     #client.chat_postMessage(channel='#lunch-bot', blocks=json.dumps(parsed_json))
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
