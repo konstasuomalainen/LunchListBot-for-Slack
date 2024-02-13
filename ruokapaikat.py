@@ -44,4 +44,23 @@ def find_ruoka3():
     #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
     datas3 = soup.find_all('li', class_="menu-list__item")
     return datas3
+
+
+def find_ruoka4():
+    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    html_text = requests.get('https://www.lounaat.info/lounas/httpskolmekiveafiravintolawillhelmiina/lappeenranta').text
+    #SIVULLE TEHTIIN JOTAIN XD
+    soup = BeautifulSoup(html_text,'lxml')
+    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    datas4 = soup.find_all('div', class_="item")
+    return datas4
+
+def find_ruoka5():
+    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    html_text = requests.get('https://www.ruokapaikka.fi/#id=2013346&n=Cafe%20Miku').text
+    #SIVULLE TEHTIIN JOTAIN XD
+    soup = BeautifulSoup(html_text,'lxml')
+    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    datas5 = soup.find_all('li', class_="menu-list__item")
+    return datas5
     
