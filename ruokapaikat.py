@@ -1,5 +1,3 @@
-
-
 from bs4 import BeautifulSoup 
 
 
@@ -16,51 +14,59 @@ import requests
 
 
 def find_ruoka1():
-    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    #HTML TEXT OF THE MENU PAGE
     html_text = requests.get('https://www.lounaat.info/lounas/cafe-hullu-orava/lappeenranta').text
-    #SIVULLE TEHTIIN JOTAIN XD
+    #Checking HTML page
     soup = BeautifulSoup(html_text,'lxml')
-    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
     datas1 = soup.find_all('div', class_="item")
     return datas1
     
-    
-    
-
 def find_ruoka2():
-    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    #HTML TEXT OF THE MENU PAGE
     html_text = requests.get('https://www.lounaat.info/lounas/pancho-villa/lappeenranta').text
-    #SIVULLE TEHTIIN JOTAIN XD
+    #Checking HTML page
     soup = BeautifulSoup(html_text,'lxml')
-    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
     datas2 = soup.find_all('div', class_="item")
     return datas2
 
 def find_ruoka3():
-    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    #HTML TEXT OF THE MENU PAGE
     html_text = requests.get('https://wolkoff.fi/ruoka-juoma/').text
-    #SIVULLE TEHTIIN JOTAIN XD
+    #Checking HTML page
     soup = BeautifulSoup(html_text,'lxml')
-    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
     datas3 = soup.find_all('li', class_="menu-list__item")
     return datas3
 
-
 def find_ruoka4():
-    #RUOKALISTA SIVUN KOKO HTML TEKSTI
+    #HTML TEXT OF THE MENU PAGE
     html_text = requests.get('https://www.lounaat.info/lounas/httpskolmekiveafiravintolawillhelmiina/lappeenranta').text
-    #SIVULLE TEHTIIN JOTAIN XD
+    #Checking HTML page
     soup = BeautifulSoup(html_text,'lxml')
-    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
     datas4 = soup.find_all('div', class_="item")
     return datas4
 
 def find_ruoka5():
-    #RUOKALISTA SIVUN KOKO HTML TEKSTI
-    html_text = requests.get('https://www.ruokapaikka.fi/#id=2013346&n=Cafe%20Miku').text
-    #SIVULLE TEHTIIN JOTAIN XD
+    #HTML TEXT OF THE MENU PAGE
+    html_text = requests.get('https://www.lounaat.info/lounas/lounaskahvila-elsi/lappeenranta').text
+    #Checking HTML page
     soup = BeautifulSoup(html_text,'lxml')
-    #LÖYDETÄÄN KAIKKI LI, MENU-LIST_ITEM, koska sieltä löytyy ruokalistan sisältö
-    datas5 = soup.find_all('li', class_="menu-list__item")
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
+    datas5 = soup.find_all('div', class_="item")
     return datas5
+
+def find_ruoka6():
+    #HTML TEXT OF THE MENU PAGE
+    html_text = requests.get('https://www.lounaat.info/lounas/kehruuhuone/lappeenranta').text
+    #Checking HTML page
+    soup = BeautifulSoup(html_text,'lxml')
+    #FIND ALL LI, MENU-LIST_ITEM, because that's where the menu content is found
+    datas6 = soup.find_all('div', class_="item")
+    return datas6
+
+
+
     
